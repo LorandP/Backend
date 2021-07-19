@@ -1,25 +1,17 @@
 {
   "name": "backend",
-  "version": "1.0.0",
-  "description": "This project will help me learn more about the backend environment",
-  "main": "index.js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon ./bin/www",
+    "run": "DEBUG=backend:* npm start"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LorandP/Backend.git"
-  },
-  "keywords": [
-    "backend"
-  ],
-  "author": "Palfalvi Lorand",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/LorandP/Backend/issues"
-  },
-  "homepage": "https://github.com/LorandP/Backend#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1"
   }
 }
