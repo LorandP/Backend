@@ -3,6 +3,7 @@ const app = express();
 const port = 3000;
 const usersRouter = require("./routes");
 
+app.use(express.json());
 app.use(usersRouter);
 
 app.get("/", (req, res) => {
