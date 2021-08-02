@@ -34,27 +34,37 @@ async function quickstart() {
 
 /* GET users listing. */
 // Using route parameters /:user_id
-router.get("/users/:user_id/profile", async function (req, res, next) {
+router.get("/users/:user_id/profile", async function (req, res) {
+  // 1. Validate input
   const userID = req.params.user_id;
+  if (!userID) {
+    return res.status(400).json({
+      message: "userID query parameter should be defined",
+    });
+  }
+  // 2. Perform the logic of your endpoint
   const document = getDocumentReference(userID);
   const doc = await document.get();
-  console.log({ doc, res });
+  const data = doc.data();
 
-  // let data = "";
-  // req.on("data", (chunk) => {
-  //   data += chunk;
-  // });
-  // req.on("end", () => {
-  //   let dataObj = qs.parse(data);
-  //   const formattedData = res.end(JSON.stringify(dataObj))
-  //   console.log({formattedData});
-  // });
-  return res.status(200).json({
-    title: "Hello world from user!",
-  });
+  // 3. Handle errors
+  if (!data) {
+    return res.status(404).json({
+      message: "User not found",
+    });
+  }
+
+  if (!data?.profile) {
+    return res.status(404).json({
+      message: "Internal data schema is wrong",
+    });
+  }
+
+  // 4. Return response
+  return res.status(200).json(data.profile);
 });
 
-router.put("/users/:user_id/profile", async function (req, res, next) {
+router.put("/users/:user_id/profile", async function (req, res) {
   const userID = req.params.user_id;
   const document = getDocumentReference(userID);
   console.log(req);
