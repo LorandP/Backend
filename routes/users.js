@@ -80,17 +80,31 @@ router.get("/users/:user_id/profile", async function (req, res) {
 });
 
 router.put("/users/:user_id/profile", async function (req, res) {
-  const userID = req.params.user_id;
-  console.log(req.body);
-  const document = getDocumentReference(userID);
-  const doc = await document.update({
-    profile: {
-      gender: "prefer not to say",
-    },
-  });
-  return res.status(200).json({
-    title: "Update successful!",
-  });
+  try {
+    // Verify input
+    const userID = req.params.user_id;
+    if (!userID) {
+      throw new HttpError(400, "userID query parameter should be defined");
+    }
+    const gender = req.body?.gender;
+    if (!gender) {
+      throw new HttpError(400, "gender should be defined");
+    }
+
+    // Perform logic
+    const document = getDocumentReference(userID);
+    await document.update({
+      profile: {
+        gender,
+      },
+    });
+
+    return res.status(200).json({
+      title: "Update successful!",
+    });
+  } catch (error) {
+    return errorHandler({ res, error });
+  }
 });
 
 module.exports = router;
