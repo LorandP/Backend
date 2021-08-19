@@ -1,23 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { firestoreDB: firestore } = require("../db/firestoreDB");
-
-// TODO: Move outside
-class HttpError extends Error {
-  constructor(statusCode, message) {
-    super();
-    this.name = "HttpError";
-    this.message = message;
-    this.statusCode = statusCode ?? 500;
-  }
-}
-
-// TODO: Move outside
-function errorHandler({ res, error }) {
-  return res.status(error.statusCode).json({
-    message: error.message,
-  });
-}
+const HttpError = require("../error");
+const { errorHandler } = require("../error/errorHandler");
 
 function getDocumentReference(doc) {
   return firestore.collection("users").doc(doc);
@@ -102,6 +87,14 @@ router.put("/users/:user_id/profile", async function (req, res) {
     return res.status(200).json({
       title: "Update successful!",
     });
+  } catch (error) {
+    return errorHandler({ res, error });
+  }
+});
+
+router.post("/users", async function (req, res) {
+  try {
+    
   } catch (error) {
     return errorHandler({ res, error });
   }
